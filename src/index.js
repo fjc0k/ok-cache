@@ -10,8 +10,7 @@ export default class OkCache {
 
   constructor({
     prefix = '',
-    driver = 'localStorage',
-    debug = false
+    driver = 'localStorage'
   }) {
     assertOk(drivers[driver], `The ${driver} driver is not found`);
 

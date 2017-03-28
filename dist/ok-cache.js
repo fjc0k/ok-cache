@@ -1,5 +1,5 @@
 /*!
- * ok-cache v1.0.0 
+ * ok-cache v1.0.1 
  * (c) 2017 fjc0k
  * Released under the MIT License.
  */
@@ -456,13 +456,64 @@ var localStorageDriver = (function (storageDriver$$1) {
 }(storageDriver));
 
 /**
+ * Created by 方剑成 on 2017/3/28.
+ */
+
+var wxappDriver = function wxappDriver () {};
+
+wxappDriver.prototype.has = function has (key) {
+  return this.get(key) !== null;
+};
+
+wxappDriver.prototype.get = function get (key) {
+  var value = null;
+  try {
+    value = JSON.parse(wx.getStorageSync(key));
+  } catch (err) {}
+  return value;
+};
+
+wxappDriver.prototype.keys = function keys () {
+  return wx.getStorageInfoSync().keys;
+};
+
+wxappDriver.prototype.all = function all () {
+    var this$1 = this;
+
+  var all = {};
+  var keys = this.keys();
+  for (var i = 0; i < keys.length; i++) {
+    all[keys[i]] = this$1.get(keys[i]);
+  }
+  return all;
+};
+
+wxappDriver.prototype.set = function set (key, value) {
+  wx.setStorageSync(key, JSON.stringify(value));
+  return value;
+};
+
+wxappDriver.prototype.remove = function remove (key) {
+  return wx.removeStorageSync(key);
+};
+
+wxappDriver.prototype.count = function count () {
+  return this.keys().length;
+};
+
+wxappDriver.prototype.clear = function clear () {
+  return wx.clearStorageSync();
+};
+
+/**
  * Created by 方剑成 on 2017/2/18.
  */
 
 var drivers = {
   session: sessionDriver,
   sessionStorage: sessionStorageDriver,
-  localStorage: localStorageDriver
+  localStorage: localStorageDriver,
+  wxapp: wxappDriver
 };
 
 /**
@@ -472,7 +523,6 @@ var drivers = {
 var OkCache = function OkCache(ref) {
   var prefix = ref.prefix; if ( prefix === void 0 ) prefix = '';
   var driver = ref.driver; if ( driver === void 0 ) driver = 'localStorage';
-  var debug = ref.debug; if ( debug === void 0 ) debug = false;
 
   assertOk(drivers[driver], ("The " + driver + " driver is not found"));
 

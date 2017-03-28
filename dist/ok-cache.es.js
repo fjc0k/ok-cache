@@ -3,8 +3,6 @@
  * (c) 2017 fjc0k
  * Released under the MIT License.
  */
-'use strict';
-
 var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
 
@@ -777,4 +775,4 @@ OkCache.prototype.setDriver = function setDriver (driver) {
   this.driver = driver;
 };
 
-module.exports = OkCache;
+export default OkCache;

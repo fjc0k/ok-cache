@@ -5,9 +5,11 @@
 import sessionDriver from './sessionDriver';
 import sessionStorageDriver from './sessionStorageDriver';
 import localStorageDriver from './localStorageDriver';
+import wxappDriver from './wxappDriver';
 
 export default {
   session: sessionDriver,
   sessionStorage: sessionStorageDriver,
-  localStorage: localStorageDriver
+  localStorage: localStorageDriver,
+  wxapp: wxappDriver
 }

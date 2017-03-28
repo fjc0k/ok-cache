@@ -10,10 +10,10 @@ npm i ok-cache --save
 ```javascript
 import OkCache from 'ok-cache';
 
-const prefix = 'app_';
-const driver = 'localStorage';
-
-const cache = new OkCache(prefix, driver);
+const cache = new OkCache({
+  prefix: 'app_', // default: ''
+  driver: 'wxapp' // default: 'localStorage'
+});
 
 cache.flush().rememberMany({
   userInfo (resolve) {
