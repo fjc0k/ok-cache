@@ -1,6 +1,6 @@
 {
   "name": "ok-cache",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Laravel cache like for javascript",
   "main": "dist/ok-cache.common.js",
   "jsnext:main": "dist/ok-cache.es.js",

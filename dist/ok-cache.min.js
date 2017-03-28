@@ -1,5 +1,5 @@
 /*!
- * ok-cache v1.0.1 
+ * ok-cache v1.0.3 
  * (c) 2017 fjc0k
  * Released under the MIT License.
  */
