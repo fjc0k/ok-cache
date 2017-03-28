@@ -2,7 +2,6 @@
  * Created by 方剑成 on 2017/2/18.
  */
 
-import './util/promise';
 import { assertOk, forOwn, getNotNull, isPromise } from './util';
 import drivers from './driver';
 
@@ -10,15 +9,24 @@ export default class OkCache {
 
   constructor({
     prefix = '',
-    driver = 'localStorage'
+    driver = 'localStorage',
+    promise = null
   }) {
     assertOk(drivers[driver], `The ${driver} driver is not found`);
+    assertOk(
+      promise !== null || window.Promise !== undefined,
+      `Promise is required`
+    );
 
     this.prefix = prefix;
 
     this.driver = driver;
     this.cache = new (drivers[driver])();
     this.$cache = new (drivers.session)(); // 二级缓存
+
+    // Promise 适配
+    this.promise = promise === null ? window.Promise : promise;
+
   }
 
   $key(key) {
@@ -40,7 +48,7 @@ export default class OkCache {
   $wrapper(func, isAsync) {
     if (isAsync) {
       return ((func) => {
-        return new Promise((resolve, reject) => {
+        return new this.promise((resolve, reject) => {
           return (
             func((value, checkNull = false) => {
               if (checkNull) value !== null && resolve(value);
@@ -100,11 +108,11 @@ export default class OkCache {
       }
       if (isAsync) {
 
-        return new Promise((resolve, reject) => {
+        return new this.promise((resolve, reject) => {
           let valuesPromises = keys.map(
             key => this.get(key, KDs[key], no$cache, true)
           );
-          Promise.all(valuesPromises).then(values => {
+          this.promise.all(valuesPromises).then(values => {
             let KeysToValues = {};
             keys.forEach((key, index) => {
               KeysToValues[key] = values[index];
@@ -169,7 +177,7 @@ export default class OkCache {
 
   remember(key, defaultValue, no$cache = false) {
     if (this.$shouldAsync(defaultValue)) {
-      return new Promise((resolve, reject) => {
+      return new this.promise((resolve, reject) => {
         this.get(key, defaultValue, no$cache, true).then(value => {
           this.put(key, value);
           resolve(value);
@@ -185,7 +193,7 @@ export default class OkCache {
   rememberMany(keysOrKeysToDefaultValues, no$cache = false) {
     let keysToValues = this.getMany(keysOrKeysToDefaultValues, no$cache);
     if (isPromise(keysToValues)) { // is a Promise
-      return new Promise((resolve, reject) => {
+      return new this.promise((resolve, reject) => {
         keysToValues.then(keysToValues => {
           forOwn(keysToValues, (value, key) => {
             this.put(key, value);

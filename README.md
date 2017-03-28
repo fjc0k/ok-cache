@@ -12,7 +12,8 @@ import OkCache from 'ok-cache';
 
 const cache = new OkCache({
   prefix: 'app_', // default: ''
-  driver: 'wxapp' // default: 'localStorage'
+  driver: 'wxapp', // default: 'localStorage'
+  promise: Promise // default: window.Promise, 需自行引入Promise-polyfill, 在微信小程序中务必传入此参数
 });
 
 cache.flush().rememberMany({

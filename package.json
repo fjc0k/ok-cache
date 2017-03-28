@@ -1,6 +1,6 @@
 {
   "name": "ok-cache",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Laravel cache like for javascript",
   "main": "dist/ok-cache.common.js",
   "jsnext:main": "dist/ok-cache.es.js",
@@ -28,10 +28,8 @@
     "js.clone": "^0.0.3",
     "mocha": "^3.2.0",
     "mocha-phantomjs": "^4.1.0",
+    "promise-polyfill": "^6.0.2",
     "rollup-make-bundles": "^1.0.6",
     "vue": "^2.1.10"
-  },
-  "dependencies": {
-    "promise-polyfill": "^6.0.2"
   }
 }
